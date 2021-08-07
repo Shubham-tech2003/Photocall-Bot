@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<style>
+    @import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
+    html{    background:url(https://i.ibb.co/wzPvhBY/bg-01.jpg) no-repeat;
+        background-size: cover;
+        height:100%;
+    }
+    #feedback-page{
+        text-align:center;
+    }
+    #form-main{
+        width:100%;
+        align-items: center;
+        padding-top:0px;
+    }
+    #form-div {
+        background-color:rgba(255,255,255,1);
+        align-self: center;
+        padding-left:35px;
+        padding-right:35px;
+        padding-top:50px;
+        padding-bottom:50px;
+        width: 450px;
+        border-radius: 2rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: auto;
+        margin-top: 100px;
+        -moz-border-radius: 7px;
+        -webkit-border-radius: 7px;
+    }
+    .feedback-input {
+        color:#F5F5F5;
+        font-family: Montserrat, Helvetica, Arial, sans-serif;
+        font-weight:500;
+        font-size: 18px;
+        border-radius: 2rem;
+        line-height: 22px;
+        background-color: #fbfbfb;
+        padding: 13px 13px 13px 54px;
+        margin-bottom: 10px;
+        width:100%;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+        box-sizing: border-box;
+        border: 3px solid rgba(0,0,0,0);
+    }
+    .feedback-input:focus{
+        background: #f5f5f5;
+        box-shadow: 0;
+        border: 3px solid #3498db;
+        border-radius: 2rem;
+        color: black;
+        outline: none;
+        padding: 13px 13px 13px 54px;
+    }
+    .focused{
+        color:#30aed6;
+        border:#30aed6 solid 3px;
+    }
+    /* Icons ---------------------------------- */
+    #name{
+        background-image: url(http://rexkirby.com/kirbyandson/images/name.svg);
+        background-size: 30px 30px;
+        background-position: 11px 8px;
+        background-repeat: no-repeat;
+    }
+    #name:focus{
+        background-image: url(http://rexkirby.com/kirbyandson/images/name.svg);
+        background-size: 30px 30px;
+        background-position: 8px 5px;
+        background-position: 11px 8px;
+        background-repeat: no-repeat;
+    }
+    #email{
+        background-image: url(http://rexkirby.com/kirbyandson/images/email.svg);
+        background-size: 30px 30px;
+        background-position: 11px 8px;
+        background-repeat: no-repeat;
+    }
+    #email:focus{
+        background-image: url(http://rexkirby.com/kirbyandson/images/email.svg);
+        background-size: 30px 30px;
+        background-position: 11px 8px;
+        background-repeat: no-repeat;
+    }
+    #comment{
+        background-image: url(http://rexkirby.com/kirbyandson/images/comment.svg);
+        background-size: 30px 30px;
+        background-position: 11px 8px;
+        background-repeat: no-repeat;
+    }
+    textarea {
+        width: 100%;
+        height: 150px;
+        line-height: 150%;
+        resize:vertical;
+    }
+    input:hover, textarea:hover,
+    input:focus, textarea:focus {
+        background-color:#f5f5f5;
+    }
+    #button-blue{
+        font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+        float:left;
+        width: 100%;
+        border: #fbfbfb solid 4px;
+        cursor:pointer;
+        background-color: #3498db;
+        color:white;
+        font-size:24px;
+        padding-top:22px;
+        padding-bottom:22px;
+        -webkit-transition: all 0.3s;
+        -moz-transition: all 0.3s;
+        transition: all 0.3s;
+        border-radius: 2rem;
+        margin-top:-4px;
+        font-weight:700;
+    }
+    .ease {
+        width: 0px;
+        height: 74px;
+        background-color: #fbfbfb;
+        -webkit-transition: .3s ease;
+        -moz-transition: .3s ease;
+        -o-transition: .3s ease;
+        -ms-transition: .3s ease;
+        transition: .3s ease;
+    }
+    .submit:hover .ease{
+        width:100%;
+        background-color:white;
+    }
+    @media only screen and (max-width: 580px) {
+        #form-div{
+            left: 3%;
+            margin-right: 3%;
+            width: 88%;
+            margin-left: 0;
+            padding-left: 3%;
+            padding-right: 3%;
+        }
+    }
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+<div id="form-div">
+    <form class="form" id="form1" method="POST" onsubmit="myFunction()">
+        <p class="name">
+            <input name="post-description" type="text" class="validate[required,custom[onlyLetter],length[0,100]] feedback-input" placeholder="Post Description" />
+        </p>
+        <p class="name">
+            <input name="instagram-name" type="text" class="validate[required,custom[onlyLetter],length[0,100]] feedback-input" placeholder="Instagram Username" />
+        </p>
+        <p class="email">
+            <input name="instagram-password" type="password" class="validate[required,custom[email]] feedback-input" placeholder="Instagram Password" />
+        </p>
+        <p class="email">
+            <input name="consumer-key" type="text" class="validate[required,custom[email]] feedback-input" placeholder="Twitter API Consumer Key" />
+        </p>
+        <p class="email">
+            <input name="consumer-secret" type="text" class="validate[required,custom[email]] feedback-input" placeholder="Twitter API Consumer Secret" />
+        </p>
+        <p class="email">
+            <input name="key" type="text" class="validate[required,custom[email]] feedback-input" placeholder="Twitter Api Key" />
+        </p>
+        <p class="email">
+            <input name="secret" type="text" class="validate[required,custom[email]] feedback-input" placeholder="Twitter API Secret" />
+        </p>
+        <div class="submit">
+            <input type="submit" value="SEND" id="button-blue"/>
+            <div class="ease"></div>
+        </div>
+    </form>
+</div>
+</div>
+<script>
+    function myFunction() {
+        alert("Done");
+
+    }
+
+</script>
+</body>
+</html>
