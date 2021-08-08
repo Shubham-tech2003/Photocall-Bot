@@ -27,4 +27,5 @@ while i <= int(accounts_number):
     account_name = input(f"Account {i} name: ")
     account_password = input(f"Account {i} password: ")
     if(account_type == "tweet"):
-        
+        tweet_pc = input(f"Tweet picture filename (ex: picture.png) for account {i}: ")
+        consumer_key = input(f"Twitter API consumer key for account {i}: ")
