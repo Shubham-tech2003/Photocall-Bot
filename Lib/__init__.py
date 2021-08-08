@@ -1,60 +1,53 @@
 """
-**Note:** almost all functions in the ``numpy.lib`` namespace
-are also present in the main ``numpy`` namespace.  Please use the
-functions as ``np.<funcname>`` where possible.
+=============
+Masked Arrays
+=============
 
-``numpy.lib`` is mostly a space for implementing functions that don't
-belong in core or in another NumPy submodule with a clear purpose
-(e.g. ``random``, ``fft``, ``linalg``, ``ma``).
+Arrays sometimes contain invalid or missing data.  When doing operations
+on such arrays, we wish to suppress invalid values, which is the purpose masked
+arrays fulfill (an example of typical use is given below).
 
-Most contains basic functions that are used by several submodules and are
-useful to have in the main name-space.
+For example, examine the following array:
+
+>>> x = np.array([2, 1, 3, np.nan, 5, 2, 3, np.nan])
+
+When we try to calculate the mean of the data, the result is undetermined:
+
+>>> np.mean(x)
+nan
+
+The mean is calculated using roughly ``np.sum(x)/len(x)``, but since
+any number added to ``NaN`` [1]_ produces ``NaN``, this doesn't work.  Enter
+masked arrays:
+
+>>> m = np.ma.masked_array(x, np.isnan(x))
+>>> m
+masked_array(data = [2.0 1.0 3.0 -- 5.0 2.0 3.0 --],
+      mask = [False False False  True False False False  True],
+      fill_value=1e+20)
+
+Here, we construct a masked array that suppress all ``NaN`` values.  We
+may now proceed to calculate the mean of the other values:
+
+>>> np.mean(m)
+2.6666666666666665
+
+.. [1] Not-a-Number, a floating point value that is the result of an
+       invalid operation.
+
+.. moduleauthor:: Pierre Gerard-Marchant
+.. moduleauthor:: Jarrod Millman
 
 """
-import math
+from . import core
+from .core import *
 
-from numpy.version import version as __version__
+from . import extras
+from .extras import *
 
-# Public submodules
-# Note: recfunctions and (maybe) format are public too, but not imported
-from . import mixins
-from . import scimath as emath
-
-# Private submodules
-from .type_check import *
-from .index_tricks import *
-from .function_base import *
-from .nanfunctions import *
-from .shape_base import *
-from .stride_tricks import *
-from .twodim_base import *
-from .ufunclike import *
-from .histograms import *
-
-from .polynomial import *
-from .utils import *
-from .arraysetops import *
-from .npyio import *
-from .arrayterator import Arrayterator
-from .arraypad import *
-from ._version import *
-from numpy.core._multiarray_umath import tracemalloc_domain
-
-__all__ = ['emath', 'math', 'tracemalloc_domain', 'Arrayterator']
-__all__ += type_check.__all__
-__all__ += index_tricks.__all__
-__all__ += function_base.__all__
-__all__ += shape_base.__all__
-__all__ += stride_tricks.__all__
-__all__ += twodim_base.__all__
-__all__ += ufunclike.__all__
-__all__ += arraypad.__all__
-__all__ += polynomial.__all__
-__all__ += utils.__all__
-__all__ += arraysetops.__all__
-__all__ += npyio.__all__
-__all__ += nanfunctions.__all__
-__all__ += histograms.__all__
+__all__ = ['core', 'extras']
+__all__ += core.__all__
+__all__ += extras.__all__
 
 from numpy._pytesttester import PytestTester
 test = PytestTester(__name__)
