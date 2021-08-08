@@ -108,3 +108,19 @@ def main():
 @app.route("/done")
 def done():
     return render_template("done.html")
+
+
+
+if (name == "main"):
+    PostTwitter(TwitterAPI.consumer_key, TwitterAPI.consumer_secret, TwitterAPI.key, TwitterAPI.secret, "NewMusic.jpg", post_desc)
+    PostInstagram(InstaDetails.instagram_username, InstaDetails.instagram_password, "NewMusic.jpeg", post_desc)
+    try:
+        shutil.rmtree("config")
+    except:
+        pass
+
+    try:
+        os.rename("InstaPhoto/NewMusic.jpeg.REMOVE_ME", "InstaPhoto/NewMusic.jpeg")
+    except:
+        pass
+    app.run()
