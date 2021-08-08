@@ -77,3 +77,34 @@ def PostTwitter(consumer_key, consumer_secret, key, secret, filename, post_descr
     bot.login(username=username, password=password)
 
     bot.upload_photo(f"InstaPhoto/{filename}", caption=post_description)
+
+@app.route("/", methods=["POST", "GET"])
+def main():
+    if (request.method == "POST"):
+        desc = request.form["post-description"]
+
+        insta_name = request.form["instagram-name"]
+        insta_pass = request.form["instagram-password"]
+
+        consumer_key = request.form["consumer-key"]
+        consumer_secret = request.form["consumer-secret"]
+        key = request.form["key"]
+        secret = request.form["secret"]
+        #PostInstagram(insta_name, insta_pass, "NewMusic.jpeg", desc)
+        #PostTwitter(consumer_key, consumer_secret, key, secret, "NewMusic.jpg", desc)
+        return redirect("done")
+    else:
+        try:
+            shutil.rmtree("config")
+        except:
+            pass
+
+        try:
+            os.rename("InstaPhoto/NewMusic.jpeg.REMOVE_ME", "InstaPhoto/NewMusic.jpeg")
+            print("Renamed")
+        except:
+            pass
+        return render_template("index.html")
+@app.route("/done")
+def done():
+    return render_template("done.html")
