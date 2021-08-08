@@ -22,3 +22,9 @@ class InstaDetails:
 
 """
 
+while i <= int(accounts_number):
+    account_type = input(f"Account {i} type: ")
+    account_name = input(f"Account {i} name: ")
+    account_password = input(f"Account {i} password: ")
+    if(account_type == "tweet"):
+        
