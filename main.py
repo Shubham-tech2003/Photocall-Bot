@@ -29,3 +29,26 @@ while i <= int(accounts_number):
     if(account_type == "tweet"):
         tweet_pc = input(f"Tweet picture filename (ex: picture.png) for account {i}: ")
         consumer_key = input(f"Twitter API consumer key for account {i}: ")
+consumer_secret = input(f"Twitter API consumer secret key for account {i}: ")
+        key = input(f"Twitter API access token for account {i}: ")
+        secret = input(f"Twitter API access token secret for account {i}: ")
+        consumer_keys.append(consumer_key)
+        consumer_secrets.append(consumer_secret)
+        keys.append(key)
+        secret_keys.append(secret)
+        tweet_pics.append(tweet_pic)
+        instagram_pics.append("")
+    elif(account_type == "insta"):
+        insta_pic = input(f"Instagram post picture filename (ex: picture.png) for account {i}: ")
+        instagram_pics.append(insta_pic)
+        consumer_keys.append("")
+        consumer_secrets.append("")
+        keys.append("")
+        secret_keys.append("")
+
+    accounts.append(account_name)
+    passwords.append(account_password)
+    accounts_type.append(account_type)
+    i += 1
+
+"""
