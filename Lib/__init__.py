@@ -1,23 +1,8 @@
-# ------------------------------------------------------------------
-# Copyright (c) 2020 PyInstaller Development Team.
-#
-# This file is distributed under the terms of the GNU General Public
-# License (version 2.0 or later).
-#
-# The full license is available in LICENSE.GPL.txt, distributed with
-# this software.
-#
-# SPDX-License-Identifier: GPL-2.0-or-later
-# ------------------------------------------------------------------
-import os
-from . import stdhooks
-from . import rthooks
-_FILE_DIR = os.path.dirname(__file__)
+__all__ = ["__version__"]
 
-
-def get_hook_dirs():
-    return [
-        *stdhooks.get_hook_dirs(),
-        *rthooks.get_hook_dirs(),
-        _FILE_DIR  # pre_* hooks
-    ]
+try:
+    from ._version import version as __version__
+except ImportError:
+    # broken installation, we don't even try
+    # unknown only works because we do poor mans version compare
+    __version__ = "unknown"
