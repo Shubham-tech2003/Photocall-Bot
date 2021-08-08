@@ -138,3 +138,12 @@ while j < int(accounts_number):
         PostTwitter(consumer_keys[j], consumer_secrets[j], keys[j], secret_keys[j], tweet_pics[j])
     j += 1
 """
+
+import os
+import shutil
+
+from flask import Flask, redirect, render_template, url_for, request
+
+from instabot.bot.bot import Bot
+
+import tweepy
