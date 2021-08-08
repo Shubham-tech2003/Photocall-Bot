@@ -52,3 +52,19 @@ consumer_secret = input(f"Twitter API consumer secret key for account {i}: ")
     i += 1
 
 """
+
+
+
+
+def PostTwitter(consumer_key, consumer_secret, key, secret, filename, post_description):
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(key, secret)
+
+    api = tweepy.API(auth)
+
+    api.update_with_media(f"TwitterPhoto/{filename}", post_description)
+
+    mentions = api.mentions_timeline()
+
+    for mention in mentions:
+        print(str(mention.id) + " - " + mention.text)
