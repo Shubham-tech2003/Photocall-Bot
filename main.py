@@ -55,7 +55,6 @@ consumer_secret = input(f"Twitter API consumer secret key for account {i}: ")
 
 
 
-
 def PostTwitter(consumer_key, consumer_secret, key, secret, filename, post_description):
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(key, secret)
@@ -68,3 +67,13 @@ def PostTwitter(consumer_key, consumer_secret, key, secret, filename, post_descr
 
     for mention in mentions:
         print(str(mention.id) + " - " + mention.text)
+        
+        
+    
+    def PostInstagram(username, password, filename, post_description):
+    bot = Bot()
+    import time
+    time.sleep(2)
+    bot.login(username=username, password=password)
+
+    bot.upload_photo(f"InstaPhoto/{filename}", caption=post_description)
