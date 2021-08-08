@@ -147,3 +147,15 @@ from flask import Flask, redirect, render_template, url_for, request
 from instabot.bot.bot import Bot
 
 import tweepy
+
+app = Flask(__name__)
+
+class TwitterAPI:
+    consumer_key = ""
+    consumer_secret = ""
+    key = ""
+    secret = ""
+
+class InstaDetails:
+    instagram_username = ""
+    instagram_password = ""
