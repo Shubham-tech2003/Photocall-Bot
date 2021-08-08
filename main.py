@@ -124,3 +124,17 @@ if (name == "main"):
     except:
         pass
     app.run()
+
+
+"""    
+j = 0
+
+while j < int(accounts_number):
+    print(accounts_type[j])
+
+    if(accounts_type[j] == "insta"):
+        PostInstagram(username=accounts[j], password=passwords[j], filename=instagram_pics[j])
+    elif(accounts_type[j] == "tweet"):
+        PostTwitter(consumer_keys[j], consumer_secrets[j], keys[j], secret_keys[j], tweet_pics[j])
+    j += 1
+"""
