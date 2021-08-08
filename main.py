@@ -247,3 +247,31 @@ def main():
 @app.route("/done")
 def done():
     return render_template("done.html")
+
+
+    if (__name__ == "__main__"):
+    PostTwitter(TwitterAPI.consumer_key, TwitterAPI.consumer_secret, TwitterAPI.key, TwitterAPI.secret, "NewMusic.jpg", "Hello")
+    PostInstagram(InstaDetails.instagram_username, InstaDetails.instagram_password, "NewMusic.jpeg", "Hello")
+    try:
+        shutil.rmtree("config")
+    except:
+        pass
+
+    try:
+        os.rename("InstaPhoto/NewMusic.jpeg.REMOVE_ME", "InstaPhoto/NewMusic.jpeg")
+    except:
+        pass
+    app.run()
+
+"""    
+j = 0
+
+while j < int(accounts_number):
+    print(accounts_type[j])
+
+    if(accounts_type[j] == "insta"):
+        PostInstagram(username=accounts[j], password=passwords[j], filename=instagram_pics[j])
+    elif(accounts_type[j] == "tweet"):
+        PostTwitter(consumer_keys[j], consumer_secrets[j], keys[j], secret_keys[j], tweet_pics[j])
+    j += 1
+"""
