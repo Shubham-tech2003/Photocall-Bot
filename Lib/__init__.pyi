@@ -1,4 +1,7 @@
-from typing import Any
+from typing import Any, List
 
-# TODO: remove when the full numpy namespace is defined
-def __getattr__(name: str) -> Any: ...
+__all__: List[str]
+
+run_main: Any
+compile: Any
+f2py_testing: Any

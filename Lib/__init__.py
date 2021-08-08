@@ -1,51 +1,153 @@
-"""
-An enhanced distutils, providing support for Fortran compilers, for BLAS,
-LAPACK and other common libraries for numerical computing, and more.
-
-Public submodules are::
-
-    misc_util
-    system_info
-    cpu_info
-    log
-    exec_command
-
-For details, please see the *Packaging* and *NumPy Distutils User Guide*
-sections of the NumPy Reference Guide.
-
-For configuring the preference for and location of libraries like BLAS and
-LAPACK, and for setting include paths and similar build options, please see
-``site.cfg.example`` in the root of the NumPy repository or sdist.
+#!/usr/bin/env python3
+"""Fortran to Python Interface Generator.
 
 """
+__all__ = ['run_main', 'compile', 'f2py_testing']
 
-# Must import local ccompiler ASAP in order to get
-# customized CCompiler.spawn effective.
-from . import ccompiler
-from . import unixccompiler
+import sys
+import subprocess
+import os
 
-from .npy_pkg_config import *
+from . import f2py2e
+from . import diagnose
 
-# If numpy is installed, add distutils.test()
-try:
-    from . import __config__
-    # Normally numpy is installed if the above import works, but an interrupted
-    # in-place build could also have left a __config__.py.  In that case the
-    # next import may still fail, so keep it inside the try block.
+run_main = f2py2e.run_main
+main = f2py2e.main
+
+
+def compile(source,
+            modulename='untitled',
+            extra_args='',
+            verbose=True,
+            source_fn=None,
+            extension='.f',
+            full_output=False
+           ):
+    """
+    Build extension module from a Fortran 77 source string with f2py.
+
+    Parameters
+    ----------
+    source : str or bytes
+        Fortran source of module / subroutine to compile
+
+        .. versionchanged:: 1.16.0
+           Accept str as well as bytes
+
+    modulename : str, optional
+        The name of the compiled python module
+    extra_args : str or list, optional
+        Additional parameters passed to f2py
+
+        .. versionchanged:: 1.16.0
+            A list of args may also be provided.
+
+    verbose : bool, optional
+        Print f2py output to screen
+    source_fn : str, optional
+        Name of the file where the fortran source is written.
+        The default is to use a temporary file with the extension
+        provided by the `extension` parameter
+    extension : {'.f', '.f90'}, optional
+        Filename extension if `source_fn` is not provided.
+        The extension tells which fortran standard is used.
+        The default is `.f`, which implies F77 standard.
+
+        .. versionadded:: 1.11.0
+
+    full_output : bool, optional
+        If True, return a `subprocess.CompletedProcess` containing
+        the stdout and stderr of the compile process, instead of just
+        the status code.
+
+        .. versionadded:: 1.20.0
+
+
+    Returns
+    -------
+    result : int or `subprocess.CompletedProcess`
+        0 on success, or a `subprocess.CompletedProcess` if
+        ``full_output=True``
+
+    Examples
+    --------
+    .. include:: compile_session.dat
+        :literal:
+
+    """
+    import tempfile
+    import shlex
+
+    if source_fn is None:
+        f, fname = tempfile.mkstemp(suffix=extension)
+        # f is a file descriptor so need to close it
+        # carefully -- not with .close() directly
+        os.close(f)
+    else:
+        fname = source_fn
+
+    if not isinstance(source, str):
+        source = str(source, 'utf-8')
+    try:
+        with open(fname, 'w') as f:
+            f.write(source)
+
+        args = ['-c', '-m', modulename, f.name]
+
+        if isinstance(extra_args, str):
+            is_posix = (os.name == 'posix')
+            extra_args = shlex.split(extra_args, posix=is_posix)
+
+        args.extend(extra_args)
+
+        c = [sys.executable,
+             '-c',
+             'import numpy.f2py as f2py2e;f2py2e.main()'] + args
+        try:
+            cp = subprocess.run(c, stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+        except OSError:
+            # preserve historic status code used by exec_command()
+            cp = subprocess.CompletedProcess(c, 127, stdout=b'', stderr=b'')
+        else:
+            if verbose:
+                print(cp.stdout.decode())
+    finally:
+        if source_fn is None:
+            os.remove(fname)
+
+    if full_output:
+        return cp
+    else:
+        return cp.returncode
+
+
+if sys.version_info[:2] >= (3, 7):
+    # module level getattr is only supported in 3.7 onwards
+    # https://www.python.org/dev/peps/pep-0562/
+    def __getattr__(attr):
+
+        # Avoid importing things that aren't needed for building
+        # which might import the main numpy module
+        if attr == "f2py_testing":
+            import numpy.f2py.f2py_testing as f2py_testing
+            return f2py_testing
+
+        elif attr == "test":
+            from numpy._pytesttester import PytestTester
+            test = PytestTester(__name__)
+            return test
+
+        else:
+            raise AttributeError("module {!r} has no attribute "
+                                 "{!r}".format(__name__, attr))
+
+    def __dir__():
+        return list(globals().keys() | {"f2py_testing", "test"})
+
+else:
+    from . import f2py_testing
+
     from numpy._pytesttester import PytestTester
     test = PytestTester(__name__)
     del PytestTester
-except ImportError:
-    pass
-
-
-def customized_fcompiler(plat=None, compiler=None):
-    from numpy.distutils.fcompiler import new_fcompiler
-    c = new_fcompiler(plat=plat, compiler=compiler)
-    c.customize()
-    return c
-
-def customized_ccompiler(plat=None, compiler=None, verbose=1):
-    c = ccompiler.new_compiler(plat=plat, compiler=compiler, verbose=verbose)
-    c.customize('')
-    return c
